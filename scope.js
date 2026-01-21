@@ -76,12 +76,25 @@
 // console.log(a);
 
 //-----------------------------------------------------------------
-let a= 10;
-let demo= ()=>{
-    var a= 30;
-    a= 50;
-    console.log(a);
-};
+// let a= 10;
+// let demo= ()=>{
+//     var a= 30;
+//     a= 50;
+//     console.log(a);
+// };
 
-demo();
-console.log(a);
+// demo();
+// console.log(a);
+
+//----------------------------------------------------------------
+let a= 500;
+let arrfunc=()=>{
+    let a= 1000;
+    console.log(a);
+    
+    let innerfunct=()=>{
+        let a= 2000;
+        console.log(a);
+    }
+    innerfunct()
+}

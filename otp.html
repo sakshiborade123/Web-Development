@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <script src="./otp.js">
+
+    </script> -->
+    <input type="text" id="otpinput">
+    <br>
+    <br>
+    <input type="tel" value="Mob No">
+
+    <br>
+    <br>
+    <button onclick="GetOTP()">GetOTP</button>
+    <button onclick="homepage()">Home Page</button>
+
+    <script>
+        let otp;
+        
+        let homepage=()=>{
+            if(otp){
+                window.location.href="Home.html"
+            }
+            else{
+                alert("Please Enter otp")
+            }
+
+
+        }
+
+
+        let GetOTP=()=>{
+            // let otp=Math.trunc(Math.random() * 100000)
+
+           let otp=Math.trunc((Math.random() * 9000) +1000) //when we have 3 digit otp
+            // alert(`OTP RECEIVED ${otp}`)
+
+            let otpinput= document.getElementById("otpinput")
+            console.log(otpinput);
+            alert(`OTP RECEIVED ${otp}`)
+            otpinput.value=otp
+
+
+        }
+    </script>
+
+
+</body>
+</html>
