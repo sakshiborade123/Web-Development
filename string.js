@@ -153,3 +153,7 @@ console.log(str.replaceAll("Java", (match)=> {
 
 //Regular Expression
 console.log(str.replace(/java/gi, "HTML"));
+
+
+//Char At()
+console.log(str.charAt(2));
