@@ -40,45 +40,45 @@ console.log(fruit);
 
 
 
-// let price=[100,200,300]
-// let gst=price.filter((price)=>{
-//     return price +price *18/100
-// })
-// console.log(prices);
+let price=[100,200,300]
+let gst=price.filter((price)=>{
+    return price +price *18/100
+})
+console.log(price);
 
 
 
-// let score=[90,80,70]
-// let grade= score.map((score)=>{
-//     if(grade>=90){
-//         return"A+" 
-//     }
-//     else if(grade>=80){
-//         return "GradeA"
-//     }
-//     else{
-//         return "gradeb"
-//     }
+let score = [90, 80, 70];
 
-// })
-// console.log(grade);
+let grade = score.map((s) => {
+    if (s >= 90) {
+        return "A+";
+    } else if (s >= 80) {
+        return "A";
+    } else {
+        return "B";
+    }
+});
+console.log(grade);
+
 
 
 let citys= ["Hydrabad"]
 let y= citys.map((ele)=>{
-    return ele.slice(0,2)
+    return ele.slice(-2)
 })
 console.log(y);
 
 
 
-// let names=["Ram","Sita","Ajay","Ram"]
-// let n=names.map((ele)=>{
-//     //return ele.slice(0,1)=='A'
+let names=["Ram","Sita","Ajay","Ram"]
+let n=names.map((ele)=>{
+    //return ele.slice(0,1)=='A'
 
-//     return names.startswith ("A")
-// })
-// console.log(n);
+    return ele.startsWith("A")
+})
+console.log(n);
+console.log();
 
 
 
