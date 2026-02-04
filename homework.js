@@ -73,7 +73,9 @@ let result1=city2.charAt(0).toUpperCase() + city2.slice(1);
 console.log(result1);
 
 
+
 console.log("banana".split("a"));
+
 
 
 let sentence= "JavaScript is easy";
