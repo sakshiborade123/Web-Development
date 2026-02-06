@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        section{
+            height: 100vh;
+            width: 100%;
+            border: 2px solid red;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+        div{
+            height: 200px;
+            width: 200px;
+            border: 2px solid;
+            background-color: rgb(209, 245, 243);
+
+           
+        }
+    </style>
+</head>
+<body>
+   
+    <section>
+    <div>
+        <h1 onclick="Watch()">Watch</h1>
+        <p>Count: <span class="count">0</span></p>
+
+       <button onclick="watchAdd()">Add to Cart</button>
+        <button onclick="watchRemove()">Remove</button>
+
+    </div>
+    
+
+    <div>
+        <h1>TV</h1>
+        <p>Count: <span class="count">0</span></p>
+
+        <button onclick="tvAdd()">Add to Cart</button>
+        <button onclick="tvRemove()">Remove</button>
+
+    </div>
+
+    <div>
+        <h1>Mobile</h1>
+        <p>Count: <span class="count">0</span></p>
+
+        <button onclick="mobileAdd()">Add to Cart</button>
+        <button onclick="mobileRemove()">Remove</button>
+
+    </div>
+
+    <div>
+        <h1>Perfume</h1>
+        <p>Count: <span class="count">0</span></p>
+
+        <button onclick="perfumeAdd()">Add to Cart</button>
+        <button onclick="perfumeRemove()">Remove</button>
+
+    </div>
+
+    <div>
+        <h1>Powder</h1>
+        <p>Count: <span class="count">0</span></p>
+
+        <button onclick="powderAdd()">Add to Cart</button>
+        <button onclick="powderRemove()">Remove</button>
+
+
+    </div>
+
+    <div>
+        <h1>Books</h1>
+        <p>Count: <span class="count">0</span></p>
+
+       <button onclick="booksAdd()">Add to Cart</button>
+        <button onclick="booksRemove()">Remove</button>
+
+    </div>
+
+    </div>
+    </section>
+    <script src="./cart1.js"></script>
+    
+</body>
+</html>
