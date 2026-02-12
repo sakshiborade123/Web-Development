@@ -1,376 +1,394 @@
+<!-- Save as index.html and open in browser -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Indian Army Motivation Hub</title>
-  <meta name="description" content="Motivational hub with quotes, gallery, videos and resources to inspire support for the Indian Army." />
-
-  <!-- Simple styling and layout (single-file project) -->
+  <title>Indian Army Motivation Hub — React Single File</title>
+  <!-- Fonts (optional) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0b1020; --card:#0f1724; --accent:#d97706; --muted:#9aa4b2; --glass: rgba(255,255,255,0.03);
-      --radius:14px; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --bg:#0f1724; --accent:#d97706; --muted:#c5ceda; --card:#0b1220; --glass:rgba(255,255,255,0.03); --radius:12px;
     }
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,var(--bg) 0%, #071228 100%);color:#e6eef8;min-height:100vh;}
-    .container{max-width:1100px;margin:32px auto;padding:20px}
-
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:#eaf2ff; -webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#b91c1c,#d97706);display:grid;place-items:center;font-weight:700;box-shadow:0 4px 18px rgba(0,0,0,0.4)}
-    nav a{color:var(--muted);text-decoration:none;margin-left:12px;font-weight:600}
-    nav a:hover{color:#fff}
+    .crest{width:48px;height:48px;object-fit:contain}
+    .brand-text{font-weight:800}
+    .brand-text small{display:block;font-weight:600;color:var(--muted);font-size:11px}
+    .main-nav a{color:var(--muted);text-decoration:none;margin-left:14px;padding:6px 8px;border-radius:6px}
+    .main-nav a:hover{color:#fff;background:rgba(255,255,255,0.02)}
+    .main-nav a.active{color:#071228;background:var(--accent);font-weight:700}
+    .btn-cta{background:var(--accent);padding:8px 12px;border-radius:6px;color:#071228;text-decoration:none;margin-left:8px;font-weight:700}
+    .btn-ghost{border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;margin-left:8px}
+    .mobile-toggle{display:none;cursor:pointer;font-size:20px;padding:6px}
 
-    .hero{display:grid;grid-template-columns:1fr 420px;gap:20px;margin-top:20px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:22px;border-radius:var(--radius);box-shadow:0 6px 30px rgba(2,6,23,0.7)}
+    .hero{position:relative;height:480px;background-image:url('assets/hero.jpg');background-size:cover;background-position:center;display:flex;align-items:center}
+    .hero-overlay{position:absolute;inset:0;background:rgba(7,18,40,0.7)}
+    .hero-content{position:relative;color:white;padding:36px}
+    .hero-content h1{font-size:46px;letter-spacing:2px;margin:0 0 6px 0;text-transform:uppercase}
+    .lead{color:var(--muted);margin-bottom:12px}
+    .hero-actions a{margin-right:8px}
+    .hero-links{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+    .pill{background:rgba(255,255,255,0.06);padding:10px 18px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:700}
 
-    .quote-section{display:flex;flex-direction:column;gap:12px}
-    .quote{font-size:20px;line-height:1.4;padding:12px;border-radius:10px;background:var(--glass);}
-    .author{font-weight:700;color:var(--accent);margin-top:6px}
-    .controls{display:flex;gap:8px;flex-wrap:wrap}
-    button{background:transparent;border:1px solid rgba(255,255,255,0.06);color:inherit;padding:8px 12px;border-radius:10px;cursor:pointer}
-    button.primary{background:var(--accent);color:#071228;border:0}
-    .small{padding:6px 8px;font-size:14px}
+    .quick-links{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;flex:1;min-width:220px}
+    .card h3{margin:0}
 
-    .stats{display:flex;gap:12px;margin-top:10px}
-    .stat{background:rgba(255,255,255,0.02);padding:8px 12px;border-radius:10px;text-align:center}
-    .stat strong{display:block;font-size:18px}
+    .page{padding:28px 0}
+    .page .container{background:var(--card);padding:22px;border-radius:12px}
+    input,textarea,select{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .site-footer{padding:18px;text-align:center;color:var(--muted);margin-top:32px}
 
-    /* gallery */
-    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-    .thumb{height:100px;background-size:cover;background-position:center;border-radius:8px;cursor:pointer}
-
-    /* resources */
-    .resources{display:flex;flex-direction:column;gap:8px}
-    .resource{padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);display:flex;justify-content:space-between;align-items:center}
-
-    footer{margin-top:28px;padding:20px;text-align:center;color:var(--muted)}
+    /* small helpers */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .muted{color:var(--muted)}
+    .link{color:var(--accent);text-decoration:none;font-weight:700}
 
     /* responsive */
-    @media (max-width:980px){.hero{grid-template-columns:1fr}.gallery{grid-template-columns:repeat(2,1fr)} }
-    @media (max-width:560px){.gallery{grid-template-columns:repeat(1,1fr)}nav{display:none}}
-
-    /* modal */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,0.6)}
-    .modal.open{display:flex}
-    .modal .modal-card{width:min(900px,95%);border-radius:12px;padding:18px;background:linear-gradient(180deg,#071228,#071a2b)}
-
-    /* small form */
-    label{display:block;font-size:13px;color:var(--muted);margin-top:8px}
-    input,textarea{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
-
-    /* accessible focus */
-    :focus{outline:3px solid rgba(217,119,6,0.18);outline-offset:2px}
+    @media(max-width:980px){.main-nav{display:none}.mobile-toggle{display:block}}
+    @media(max-width:640px){.hero{height:360px}.hero-content h1{font-size:28px}.grid-3{grid-template-columns:repeat(1,1fr)}.grid-2{grid-template-columns:repeat(1,1fr)}
+    .quick-links{flex-direction:column}
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <div class="logo" aria-hidden>IA</div>
-        <div>
-          <div style="font-weight:800;font-size:18px">Indian Army Motivation Hub</div>
-          <div style="font-size:13px;color:var(--muted)">Inspiration • Stories • Support</div>
-        </div>
-      </div>
-      <nav aria-label="Main navigation">
-        <a href="#quotes">Quotes</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#videos">Videos</a>
-        <a href="#resources">Resources</a>
-      </nav>
-    </header>
+  <div id="root"></div>
 
-    <section class="hero">
-      <div class="card quote-section" id="quotes">
-        <h2 style="margin:0 0 6px 0">Daily Motivation</h2>
-        <div class="quote" id="quoteText" tabindex="0">Loading inspiring quote...</div>
-        <div class="author" id="quoteAuthor">—</div>
+  <!-- React + Babel CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-        <div class="controls" role="toolbar" aria-label="Quote actions">
-          <button id="newQuote" class="primary">New Quote</button>
-          <button id="favQuote" title="Save to favorites">⭐ Favorite</button>
-          <button id="copyQuote" class="small">Copy</button>
-          <button id="shareQuote" class="small">Share</button>
-          <button id="downloadQuote" class="small">Download Image</button>
-        </div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
 
-        <div class="stats" aria-hidden>
-          <div class="stat"><strong id="favCount">0</strong>Favorites</div>
-          <div class="stat"><strong id="quotesSeen">0</strong>Seen</div>
-        </div>
+    /* ---------- Router: hash-based ---------- */
+    function useHashRoute() {
+      const [route, setRoute] = useState(location.hash.replace('#','') || 'home');
+      useEffect(() => {
+        function onHash() { setRoute(location.hash.replace('#','') || 'home'); }
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+      }, []);
+      return route;
+    }
 
-        <details style="margin-top:12px;background:rgba(255,255,255,0.02);padding:12px;border-radius:10px">
-          <summary style="cursor:pointer">Saved Quotes</summary>
-          <div id="savedList" style="margin-top:8px"></div>
-        </details>
-      </div>
+    /* ---------- Shared components ---------- */
+    function Header({onToggle}) {
+      const route = location.hash.replace('#','') || 'home';
+      const nav = [
+        {to:'home', label:'Home'},
+        {to:'about', label:'About India Army'},
+        {to:'ranks', label:'Ranks & Badges'},
+        {to:'training', label:'Training'},
+        {to:'fitness', label:'Physical Fitness'},
+        {to:'weapons', label:'Weapons'},
+        {to:'stories', label:'Stories'},
+        {to:'regiments', label:'Regiments'},
+        {to:'gallery', label:'Gallery'},
+        {to:'events', label:'Events'},
+        {to:'contact', label:'Contact'},
+        {to:'login', label:'Login'},
+        {to:'eligibility', label:'Apply'}
+      ];
+      return (
+        <header className="site-header" style={{background:'transparent'}}>
+          <div className="container header-inner">
+            <div className="brand" role="banner">
+              <img src="assets/crest.png" alt="crest" className="crest" onError={(e)=>{e.target.style.display='none'}}/>
+              <div className="brand-text">JOIN INDIAN ARMY <small>Service Before Self</small></div>
+            </div>
 
-      <aside class="card">
-        <h3 style="margin-top:0">Quick Gallery</h3>
-        <div class="gallery" id="gallery"></div>
+            <nav className="main-nav" aria-label="Main navigation">
+              {nav.map(item => (
+                <a key={item.to}
+                   href={'#'+item.to}
+                   className={route===item.to ? 'active':''}
+                   aria-current={route===item.to ? 'page':undefined}
+                >{item.label}</a>
+              ))}
+              <a href="#login" className="btn-ghost" style={{marginLeft:12}}>Sign In</a>
+              <a href="#eligibility" className="btn-cta">Apply</a>
+            </nav>
 
-        <h3 style="margin-top:12px;margin-bottom:6px">Watch</h3>
-        <div style="border-radius:10px;overflow:hidden">
-          <iframe width="100%" height="200" src="https://www.youtube.com/embed/2Xc9gXyf2G4" title="Inspirational" frameborder="0" allowfullscreen loading="lazy"></iframe>
-        </div>
-
-        <h3 style="margin-top:12px">Contact & Support</h3>
-        <form id="contactForm">
-          <label for="name">Name</label>
-          <input id="name" required />
-          <label for="msg">Message</label>
-          <textarea id="msg" rows="3" required></textarea>
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button type="submit" class="primary">Send (Local)</button>
-            <button type="button" id="clearLocal">Clear</button>
+            <button className="mobile-toggle" aria-label="Open menu" onClick={onToggle}>☰</button>
           </div>
-          <small style="display:block;color:var(--muted);margin-top:8px">This demo saves messages locally (no backend).</small>
-        </form>
-      </aside>
-    </section>
-
-    <section class="card" id="resources" style="margin-top:18px">
-      <h3 style="margin-top:0">Resources & Links</h3>
-      <div class="resources">
-        <div class="resource"><div>Official Indian Army Website</div><a href="https://indianarmy.nic.in" target="_blank" rel="noopener">Visit</a></div>
-        <div class="resource"><div>Inspirational Stories</div><a href="#" id="openStories">Open</a></div>
-        <div class="resource"><div>Support & Donations (info)</div><a href="#" id="openSupport">Read</a></div>
-      </div>
-    </section>
-
-    <footer>
-      Built with ❤️ to celebrate courage. This is a front-end demo project — no official affiliation.
-    </footer>
-  </div>
-
-  <!-- Modal for image/viewer -->
-  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal-card" role="document">
-      <button id="closeModal" style="float:right;border:0;background:transparent;color:var(--muted);font-size:18px">✕</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
-
-  <script>
-    // ====== Data ======
-    const quotes = [
-      {t:'The nation’s strength is measured by the resolve of its soldiers. Carry the spirit with pride.', a:'— Army Wisdom'},
-      {t:'Courage is not the absence of fear, but the triumph over it.', a:'— Field Saying'},
-      {t:'Serve with honour, lead with humility.', a:'— Veteran Quote'},
-      {t:'Discipline is the bridge between goals and accomplishment.', a:'— Leadership'},
-      {t:'A soldier’s true weapon is their heart — resilient and ready.', a:'— Motivational'}
-    ];
-
-    // ====== Elements ======
-    const quoteText = document.getElementById('quoteText');
-    const quoteAuthor = document.getElementById('quoteAuthor');
-    const newQuoteBtn = document.getElementById('newQuote');
-    const favBtn = document.getElementById('favQuote');
-    const copyBtn = document.getElementById('copyQuote');
-    const shareBtn = document.getElementById('shareQuote');
-    const downloadBtn = document.getElementById('downloadQuote');
-    const favCountEl = document.getElementById('favCount');
-    const quotesSeenEl = document.getElementById('quotesSeen');
-    const savedList = document.getElementById('savedList');
-
-    // gallery
-    const galleryEl = document.getElementById('gallery');
-    const modal = document.getElementById('modal');
-    const modalContent = document.getElementById('modalContent');
-    const closeModal = document.getElementById('closeModal');
-
-    // contact
-    const contactForm = document.getElementById('contactForm');
-
-    // state
-    let currentIndex = 0;
-    let seen = Number(localStorage.getItem('seen')||0);
-    let favorites = JSON.parse(localStorage.getItem('favorites')||'[]');
-
-    // init
-    function pickRandom(){
-      const idx = Math.floor(Math.random()*quotes.length);
-      currentIndex = idx; return quotes[idx];
-    }
-    function renderQuote(q){
-      quoteText.textContent = q.t; quoteAuthor.textContent = q.a;
-      seen++; localStorage.setItem('seen',seen); quotesSeenEl.textContent = seen;
-      updateFavUI();
+        </header>
+      );
     }
 
-    function updateFavUI(){
-      favCountEl.textContent = favorites.length;
-      const isFav = favorites.some(q=>q.t===quotes[currentIndex].t);
-      favBtn.textContent = isFav? '⭐ Favorited':'⭐ Favorite';
-      renderSavedList();
+    function Footer(){
+      return <footer className="site-footer"><div className="container">© Indian Army Motivation Hub — Demo site. Not affiliated with Indian Army.</div></footer>;
     }
 
-    function renderSavedList(){
-      savedList.innerHTML = '';
-      if(!favorites.length) savedList.textContent = 'No saved quotes yet.';
-      favorites.forEach((q,i)=>{
-        const div = document.createElement('div');
-        div.style.padding='8px';div.style.display='flex';div.style.justifyContent='space-between';div.style.alignItems='center';
-        div.innerHTML = `<div style="flex:1">${q.t} <div style=\"color:var(--muted);font-size:12px\">${q.a}</div></div>`;
-        const rm = document.createElement('button'); rm.textContent='Remove'; rm.className='small';
-        rm.addEventListener('click',()=>{favorites.splice(i,1);localStorage.setItem('favorites',JSON.stringify(favorites));updateFavUI();});
-        div.appendChild(rm);
-        savedList.appendChild(div);
-      });
+    /* ---------- Pages ---------- */
+    function Home(){
+      return (
+        <>
+          <section className="hero" role="region" aria-label="Hero">
+            <div className="hero-overlay" />
+            <div className="hero-content container">
+              <h1>SEVA ASMAKAM DHARMA</h1>
+              <p className="lead">Service, Duty, Honour — Join to serve your nation.</p>
+              <div className="hero-actions">
+                <a href="#eligibility" className="btn-cta">Eligibility Criteria</a>
+                <a href="#login" className="btn-ghost">Online Application</a>
+              </div>
+
+              <div className="hero-links" aria-hidden>
+                <a className="pill" href="#eligibility">Reporting Date for NDA</a>
+                <a className="pill" href="#login">Online Application</a>
+                <a className="pill" href="#eligibility">Eligibility Criteria</a>
+              </div>
+            </div>
+          </section>
+
+          <section className="quick-links container" aria-labelledby="quicklinks">
+            <div className="card">
+              <h3>Ranks & Badges</h3>
+              <p>Discover the rank structure and badges.</p>
+              <a className="link" href="#ranks">Learn more →</a>
+            </div>
+            <div className="card">
+              <h3>Training Programs</h3>
+              <p>Overview of training and SSB guidance.</p>
+              <a className="link" href="#training">Explore →</a>
+            </div>
+            <div className="card">
+              <h3>Join the Army</h3>
+              <p>Check eligibility and apply.</p>
+              <a className="link" href="#eligibility">Apply →</a>
+            </div>
+          </section>
+
+          <section className="container intro">
+            <h2>Inspirational Stories</h2>
+            <p>Read moving accounts of bravery, sacrifice and service.</p>
+            <a className="link" href="#stories">View stories →</a>
+          </section>
+        </>
+      );
     }
 
-    newQuoteBtn.addEventListener('click',()=>{renderQuote(pickRandom());});
-    favBtn.addEventListener('click',()=>{
-      const q = quotes[currentIndex];
-      const exists = favorites.some(x=>x.t===q.t);
-      if(!exists){favorites.push(q);} else {favorites = favorites.filter(x=>x.t!==q.t)}
-      localStorage.setItem('favorites',JSON.stringify(favorites));updateFavUI();
-    });
+    function Ranks(){ return (
+      <div className="page"><div className="container"><h1>Ranks & Badges</h1>
+        <p>Below is a concise list of common ranks and a short description. (UI only)</p>
+        <ul>
+          <li><strong>Lieutenant</strong> — Junior Commissioned Officer</li>
+          <li><strong>Captain</strong> — Company level officer</li>
+          <li><strong>Major</strong> — Senior company/battalion officer</li>
+          <li><strong>Colonel</strong> — Senior field officer</li>
+          <li><strong>Brigadier</strong> — Brigade level</li>
+          <li><strong>Major General</strong> — Division level</li>
+          <li><strong>General</strong> — Highest field rank</li>
+        </ul>
+      </div></div>
+    );}
 
-    copyBtn.addEventListener('click',async ()=>{
-      const text = `${quotes[currentIndex].t} ${quotes[currentIndex].a}`;
-      try{ await navigator.clipboard.writeText(text); copyBtn.textContent='Copied'; setTimeout(()=>copyBtn.textContent='Copy',1200);}catch(e){alert('Copy failed: '+e.message)}
-    });
+    function Training(){ return (
+      <div className="page"><div className="container"><h1>Training Programs</h1>
+        <p>Overview of training: Basic Training, Advanced, Leadership & SSB prep.</p>
+        <div className="card"><h4>Basic Training</h4><p>Foundational soldier skills, discipline and teamwork.</p></div>
+        <div className="card" style={{marginTop:12}}><h4>Advanced & Leadership</h4><p>Specialized courses and leadership development.</p></div>
+      </div></div>
+    );}
 
-    shareBtn.addEventListener('click',async ()=>{
-      const text = `${quotes[currentIndex].t} ${quotes[currentIndex].a}`;
-      if(navigator.share){
-        navigator.share({title:'Motivation',text,});
-      } else { alert('Share not supported on this device. You can copy the quote instead.') }
-    });
+    function Fitness(){ return (
+      <div className="page"><div className="container"><h1>Physical Fitness Guide</h1>
+        <p>Sample daily routine and training tips (UI only).</p>
+        <div className="card"><h4>Daily Routine</h4>
+          <ul>
+            <li>Morning run — 5–10 km (gradual build-up)</li>
+            <li>Strength training — push-ups, squats, pull-ups</li>
+            <li>Endurance — long marches with pack</li>
+          </ul>
+        </div>
+      </div></div>
+    );}
 
-    // download quote as image using canvas
-    downloadBtn.addEventListener('click',()=>{
-      const canvas = document.createElement('canvas');
-      canvas.width = 1200; canvas.height = 630;
-      const ctx = canvas.getContext('2d');
-      // background
-      ctx.fillStyle = '#071228'; ctx.fillRect(0,0,canvas.width,canvas.height);
-      // accent
-      ctx.fillStyle = '#d97706'; ctx.fillRect(0,canvas.height-80,canvas.width,80);
-      ctx.fillStyle = '#ffffff'; ctx.font='34px sans-serif';
-      const quote = quotes[currentIndex].t; const author = quotes[currentIndex].a;
-      wrapText(ctx,quote,60,160,1080,40);
-      ctx.font='24px sans-serif'; ctx.fillText(author,60,canvas.height-30);
-      const a = document.createElement('a'); a.download='motivation.png'; a.href = canvas.toDataURL('image/png'); a.click();
-    });
+    function Weapons(){ return (
+      <div className="page"><div className="container"><h1>Weapons Awareness (UI only)</h1>
+        <p>UI-only overview of equipment. No technical details.</p>
+        <div className="grid-2" style={{marginTop:12}}>
+          <div className="card"><h4>Rifles</h4><p>Standard-issue small arms overview.</p></div>
+          <div className="card"><h4>Armoured</h4><p>Armoured vehicles and role overview.</p></div>
+        </div>
+      </div></div>
+    );}
 
-    function wrapText(ctx, text, x, y, maxWidth, lineHeight){
-      const words = text.split(' '); let line='';
-      for(let n=0;n<words.length;n++){
-        const testLine = line + words[n] + ' ';
-        const metrics = ctx.measureText(testLine); const testWidth = metrics.width;
-        if(testWidth > maxWidth && n>0){ctx.fillText(line, x, y); line = words[n] + ' '; y += lineHeight;} else {line = testLine}
+    function Stories(){ return (
+      <div className="page"><div className="container"><h1>Inspirational Stories</h1>
+        <article><h3>Bravery in Action</h3><p>Short sample story about dedication and service (demo).</p></article>
+        <article style={{marginTop:12}}><h3>Devotion to Duty</h3><p>Another short story highlighting values and sacrifice.</p></article>
+      </div></div>
+    );}
+
+    function Regiments(){ return (
+      <div className="page"><div className="container"><h1>History of Regiments</h1>
+        <p>Short historical overview of notable regiments (UI only).</p>
+        <div className="card" style={{marginTop:12}}><h4>Regiment A</h4><p>Heritage and notable campaigns (demo).</p></div>
+      </div></div>
+    );}
+
+    function Gallery(){ return (
+      <div className="page"><div className="container"><h1>Gallery (Photos & Videos)</h1>
+        <div className="grid-3" style={{marginTop:12}}>
+          <img src="assets/hero.jpg" alt="thumb" style={{width:'100%',borderRadius:8}} onError={(e)=>{e.target.style.display='none'}}/>
+          <img src="assets/hero.jpg" alt="thumb" style={{width:'100%',borderRadius:8}} onError={(e)=>{e.target.style.display='none'}}/>
+          <img src="assets/hero.jpg" alt="thumb" style={{width:'100%',borderRadius:8}} onError={(e)=>{e.target.style.display='none'}}/>
+        </div>
+      </div></div>
+    );}
+
+    function Events(){ return (
+      <div className="page"><div className="container"><h1>Events & Camps</h1>
+        <p>Upcoming recruitment camps & public events (sample UI).</p>
+        <div className="card" style={{marginTop:12}}><h4>Recruitment Camp — City X</h4><p>Date: 2026-01-10 (demo)</p></div>
+      </div></div>
+    );}
+
+    function Contact(){
+      const [name,setName] = useState('');
+      const [msg,setMsg] = useState('');
+      function onSubmit(e){ e.preventDefault(); const list = JSON.parse(localStorage.getItem('messages')||'[]'); list.push({name,msg,at:new Date().toISOString()}); localStorage.setItem('messages', JSON.stringify(list)); alert('Message saved locally (demo).'); setName(''); setMsg('');}
+      return (
+        <div className="page"><div className="container"><h1>Contact the Academy</h1>
+          <form onSubmit={onSubmit}>
+            <label>Name</label><input value={name} onChange={e=>setName(e.target.value)} required/>
+            <label>Message</label><textarea value={msg} onChange={e=>setMsg(e.target.value)} rows={4} required/>
+            <div style={{marginTop:12}}><button className="btn-cta" type="submit">Send</button></div>
+          </form>
+          <p className="muted" style={{marginTop:10}}>Demo: messages are stored locally only.</p>
+        </div></div>
+      );
+    }
+
+    function Eligibility(){ return (
+      <div className="page"><div className="container"><h1>Join Indian Army – Eligibility</h1>
+        <ul>
+          <li>Age limits: 17.5 - 23 (example)</li>
+          <li>Education: 10+2 / Graduation (varies by entry)</li>
+          <li>Medical: Fit as per standards</li>
+        </ul>
+        <p className="muted">This is demo content. Check official portals for exact criteria.</p>
+      </div></div>
+    );}
+
+    function Login(){
+      const [email,setEmail] = useState(''); const [pwd,setPwd] = useState('');
+      function onSubmit(e){ e.preventDefault(); alert('Demo sign in — no backend.'); }
+      return (
+        <div className="page"><div className="container"><h1>Login / Register</h1>
+          <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+            <form style={{flex:1,minWidth:260}} onSubmit={onSubmit}>
+              <label>Email</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} required/>
+              <label>Password</label><input type="password" value={pwd} onChange={e=>setPwd(e.target.value)} required/>
+              <div style={{marginTop:10}}><button className="btn-cta" type="submit">Sign in</button></div>
+            </form>
+            <div style={{flex:1,minWidth:260}}>
+              <h3>New here?</h3>
+              <p>Create an account to apply and track progress (demo).</p>
+              <a className="btn-ghost" href="#register">Register</a>
+            </div>
+          </div>
+        </div></div>
+      );
+    }
+
+    function Dashboard(){ return (
+      <div className="page"><div className="container"><h1>Cadet Dashboard (Dummy)</h1>
+        <p>Training progress (demo):</p>
+        <div className="card"><strong>Physical</strong>
+          <div style={{height:12,background:'rgba(255,255,255,0.06)',borderRadius:8,marginTop:8,overflow:'hidden'}}><div style={{height:12,background:'var(--accent)',width:'70%'}}></div></div>
+        </div>
+        <div className="card" style={{marginTop:8}}><strong>SSB Prep</strong>
+          <div style={{height:12,background:'rgba(255,255,255,0.06)',borderRadius:8,marginTop:8,overflow:'hidden'}}><div style={{height:12,background:'var(--accent)',width:'40%'}}></div></div>
+        </div>
+      </div></div>
+    );}
+
+    function About(){ return (
+      <div className="page"><div className="container"><h1>About Indian Army</h1>
+        <p>Short intro: values, motto and service. This demo site celebrates the spirit of service and is not official.</p>
+        <div className="card" style={{marginTop:12}}><h4>Motto</h4><p>Service Before Self</p></div>
+      </div></div>
+    );}
+
+    function FAQ(){ return (
+      <div className="page"><div className="container"><h1>Help & FAQ</h1>
+        <dl>
+          <dt>How to apply?</dt><dd>Visit Eligibility and Apply pages (demo).</dd>
+          <dt>Is this official?</dt><dd>No — demo UI only.</dd>
+        </dl>
+      </div></div>
+    );}
+
+    /* ---------- App (router + mobile menu) ---------- */
+    function App(){
+      const route = useHashRoute();
+      const [showMobileNav, setShowMobileNav] = useState(false);
+
+      useEffect(()=>{ // close mobile nav on route change
+        setShowMobileNav(false);
+      }, [route]);
+
+      // choose page component
+      const routes = {
+        home: <Home/>,
+        ranks: <Ranks/>,
+        training: <Training/>,
+        fitness: <Fitness/>,
+        weapons: <Weapons/>,
+        stories: <Stories/>,
+        regiments: <Regiments/>,
+        gallery: <Gallery/>,
+        contact: <Contact/>,
+        eligibility: <Eligibility/>,
+        events: <Events/>,
+        login: <Login/>,
+        dashboard: <Dashboard/>,
+        about: <About/>,
+        faq: <FAQ/>,
+      };
+      const Page = routes[route] || routes['home'];
+
+      // dynamic mobile nav (simple)
+      function MobileNav(){
+        return (
+          <div style={{position:'fixed',inset:0,background:'rgba(2,6,23,0.85)',zIndex:999,padding:20}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div style={{display:'flex',gap:12,alignItems:'center'}}><img src="assets/crest.png" alt="crest" style={{width:40}} onError={(e)=>{e.target.style.display='none'}}/><strong>JOIN INDIAN ARMY</strong></div>
+              <button onClick={()=>setShowMobileNav(false)} style={{background:'transparent',border:'0',color:'#fff',fontSize:20}}>✕</button>
+            </div>
+            <nav style={{marginTop:20,display:'flex',flexDirection:'column',gap:12}}>
+              {['home','about','ranks','training','fitness','weapons','stories','regiments','gallery','events','contact','login','eligibility','dashboard','faq'].map(k => (
+                <a key={k} href={'#'+k} style={{color:'#fff',textDecoration:'none',fontSize:18}} onClick={()=>setShowMobileNav(false)}>{k.charAt(0).toUpperCase() + k.slice(1).replace('-',' ')}</a>
+              ))}
+            </nav>
+          </div>
+        );
       }
-      ctx.fillText(line, x, y);
+
+      return (
+        <>
+          <Header onToggle={()=>setShowMobileNav(v=>!v)} />
+          { showMobileNav && <MobileNav /> }
+          <main>
+            {Page}
+          </main>
+          <Footer />
+        </>
+      );
     }
 
-    // ===== gallery setup (placeholder images) =====
-    const thumbs = [
-      'https://images.unsplash.com/photo-1537089944496-8b2f6bdc8d75?w=1200&q=60&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=1200&q=60&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=60&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200&q=60&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&q=60&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1527694224015-8a4e6a3e7c2f?w=1200&q=60&auto=format&fit=crop'
-    ];
-
-    function buildGallery(){
-      thumbs.forEach((src,i)=>{
-        const d = document.createElement('div'); d.className='thumb'; d.style.backgroundImage=`url(${src})`; d.tabIndex=0;
-        d.addEventListener('click',()=>openModal(src)); d.addEventListener('keydown',(e)=>{if(e.key==='Enter')openModal(src)});
-        galleryEl.appendChild(d);
-      })
-    }
-
-    function openModal(src){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); modalContent.innerHTML = `<img src='${src}' style='max-width:100%;display:block;border-radius:8px' alt='gallery'/>` }
-    function closeModalFn(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); modalContent.innerHTML=''; }
-    closeModal.addEventListener('click',closeModalFn);
-    modal.addEventListener('click',(e)=>{ if(e.target===modal) closeModalFn(); });
-
-    // contact form (local)
-    contactForm.addEventListener('submit',(e)=>{
-      e.preventDefault(); const name=document.getElementById('name').value.trim(); const msg=document.getElementById('msg').value.trim();
-      const list = JSON.parse(localStorage.getItem('messages')||'[]'); list.push({name, msg, at: new Date().toISOString()}); localStorage.setItem('messages', JSON.stringify(list));
-      alert('Message saved locally.'); contactForm.reset();
-    });
-    document.getElementById('clearLocal').addEventListener('click',()=>{ localStorage.removeItem('messages'); alert('Local messages cleared'); });
-
-    // stories & support quick handlers (demo)
-    document.getElementById('openStories').addEventListener('click',(e)=>{ e.preventDefault(); modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); modalContent.innerHTML = `<h2>Stories of Courage</h2><p style=\"color:var(--muted)\">This demo contains sample stories. In a full app, this would load articles, interviews, and verified resources.</p>` });
-    document.getElementById('openSupport').addEventListener('click',(e)=>{ e.preventDefault(); modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); modalContent.innerHTML = `<h2>Support Information</h2><p style=\"color:var(--muted)\">For official support & donations, always use verified government portals. This demo only links to public info.</p>` });
-
-    // initial render
-    (function init(){ buildGallery(); favorites = JSON.parse(localStorage.getItem('favorites')||'[]'); quotesSeenEl.textContent = seen; renderQuote(pickRandom()); updateFavUI(); })();
-
-    // accessibility: close modal with esc
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModalFn(); });
-
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
-    
-    <!-- New Feature Sections Added -->
-    <section id="ranks" class="section">
-        <h2>Ranks & Badges</h2>
-        <p>Learn about the hierarchy, ranks, and badges of the Indian Army.</p>
-    </section>
-
-    <section id="training" class="section">
-        <h2>Training Programs</h2>
-        <p>Overview of Indian Army training programs, SSB preparation, discipline routines, and more.</p>
-    </section>
-
-    <section id="fitness" class="section">
-        <h2>Physical Fitness Guide</h2>
-        <p>Daily fitness routines, requirements, tips for endurance, stamina, strength training.</p>
-    </section>
-
-    <section id="weapons" class="section">
-        <h2>Weapons Awareness (UI Only)</h2>
-        <p>A showcase of Indian Army weapons (UI only – no deep technical details).</p>
-    </section>
-
-    <section id="stories" class="section">
-        <h2>Inspirational Stories</h2>
-        <p>Stories of bravery, sacrifice, and motivation from soldiers.</p>
-    </section>
-
-    <section id="regiments" class="section">
-        <h2>History of Regiments</h2>
-        <p>Explore the heritage and history of various Indian Army regiments.</p>
-    </section>
-
-    <section id="events" class="section">
-        <h2>Events & Camps</h2>
-        <p>Information about army events, camps, rallies, and public programs.</p>
-    </section>
-
-    <section id="eligibility" class="section">
-        <h2>Join Indian Army – Eligibility</h2>
-        <p>Age limits, qualifications, medical criteria, and entry schemes.</p>
-    </section>
-
-    <section id="login" class="section">
-        <h2>Login / Register</h2>
-        <p>Simple dummy login and registration UI (not functional).</p>
-    </section>
-
-    <section id="dashboard" class="section">
-        <h2>Cadet Dashboard (Dummy)</h2>
-        <p>Demo dashboard showing training progress, tasks, and achievements.</p>
-    </section>
-
-    <section id="about" class="section">
-        <h2>About Indian Army</h2>
-        <p>Brief introduction, values, motto, and mission of the Indian Army.</p>
-    </section>
-
-    <section id="faq" class="section">
-        <h2>Help & FAQ</h2>
-        <p>Frequently asked questions for cadets and students.</p>
-    </section>
-
 </body>
 </html>
-
