@@ -1,0 +1,25 @@
+input[type]{
+    border: 2px, solid red;
+}
+
+input[type="email"]{
+    border: 2px solid blue;
+}
+
+div[id^="box1"]{
+    height: 100px;
+    width: 100px;
+    border: 2px solid green;
+}
+
+div[id*="container"]{
+    height: 100px;
+    width: 100px;
+    border: 2px solid goldenrod;
+}
+
+div[id$="div"]{
+    height: 100px;
+    width: 100px;
+    border: 2px solid palevioletred;
+}

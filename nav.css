@@ -1,0 +1,101 @@
+#myntraheader{
+    height: 100px;
+    width: 100%;
+    /* border: 3px solid; */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 10px 10px 10px rgb(215, 210, 210);
+}
+
+#logo-links{
+    height: 90px;
+    width: 45%;
+    /* border: 2px solid; */
+    display: flex;
+    align-items: center;
+    
+}
+
+
+#navlinks{
+    height: inherit;
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+   
+
+}
+
+a{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    
+
+}
+
+sup{
+    color: red;
+}
+
+
+#search-bar{
+    height: 90px;
+    width: 30%;
+    /* border: 2px solid; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo{
+    height: 90px;
+    width: 20%;
+    border: 2px solid;
+}
+
+#search-icon{
+    height: 38px;
+    width: 40px;
+    border: 1px solid; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: none;
+
+}
+
+input{
+    height: 40px;
+    width: 90%;
+    outline: none;
+    border: 1px solid;
+    border-left: none;
+}
+
+#magnifying-glass{
+    font-size: 20px;
+}
+
+
+#icons{
+    height: 90px;
+    width: 20%;
+    display: flex;
+    align-items:  center;
+    /* border: 3px solid; */
+}
+
+.icon-box{
+    height: 60px;
+    width: 100px;
+    /* border: 2px solid; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

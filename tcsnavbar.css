@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.tcs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.tcs-logo img {
+  height: 34px;
+}
+
+.tcs-nav {
+  display: flex;
+  gap: 28px;
+}
+
+.tcs-nav a {
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+}
+
+.tcs-nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #0066ff;
+  left: 0;
+  bottom: -6px;
+  transition: 0.3s;
+}
+
+.tcs-nav a:hover::after {
+  width: 100%;
+}
+
+.tcs-icons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.tcs-icons i {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.contact-btn {
+  padding: 8px 16px;
+  border: 1px solid #000;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.contact-btn:hover {
+  background: #000;
+  color: #fff;
+}

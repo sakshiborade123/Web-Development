@@ -1,0 +1,56 @@
+body{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+div {
+    /* border: 2px solid wheat */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation-name: box;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    border-radius: 10px;
+    animation-direction: alternate;
+
+}
+@keyframes box {
+    to{
+        rotate: 360deg;
+    }
+    
+}
+#box1{
+    height: 300px;
+    width: 300px;
+    background-color: aquamarine;
+}
+#box2{
+    height: 250px;
+    width: 250px;
+    background-color: blueviolet;
+}
+#box3{
+    height: 200px;
+    width: 200px;
+    background-color: darkcyan;
+}
+#box4{
+    height: 150px;
+    width: 150px;
+    background-color: palevioletred;
+
+}
+#box5{
+    height: 100px;
+    width: 100px;
+    background-color: darkorange;
+}
+#box6{
+    height: 50px;
+    width: 50px;
+    background-color: dimgray;
+}

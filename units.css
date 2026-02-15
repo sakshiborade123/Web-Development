@@ -1,0 +1,14 @@
+
+/* absolute unit */
+#container{
+    height: 500cm;
+    width: 750cm;
+    background-color: blanchedalmond;
+}
+
+/* relative unit */
+#container{
+    height: 50vh;
+    width: 50%;
+    background-color: aquamarine;
+}

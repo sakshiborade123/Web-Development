@@ -1,0 +1,57 @@
+div{
+    height: 100px;
+    width: 100%;
+}
+div:nth-child(1){
+    background-color: purple;
+}
+div:nth-child(2){
+    background-color: palevioletred;
+}
+div:nth-child(3){
+    background-color: skyblue;
+}
+div:nth-child(4){
+    background-color: lightgoldenrodyellow;
+}
+div:nth-child(5){
+    background-color: aquamarine;
+}
+div:nth-child(6){
+    background-color: lightsalmon;
+}
+
+a:link{
+    color: red;
+}
+a:visited{
+    color: green;
+}
+
+a:active{
+    color: blueviolet;
+}
+
+#box{
+    height: 300px;
+    width: 200px;
+    background-color: black;
+    transition-duration: 2s;
+
+}
+#container{
+    height: 100px;
+    width: 100px;
+    background-color: black;
+    display: none;
+}
+a:hover+#container{
+    display: block;
+}
+
+#box:hover{
+    background-color: lightseagreen;
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+}

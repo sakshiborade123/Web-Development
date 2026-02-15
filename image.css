@@ -1,0 +1,33 @@
+#main{
+    height: 900px;
+    width: 100%;
+    border-radius: 10px;
+}
+#img{
+    height: 500px;
+    width: 500px;
+}
+#container{
+    height: 300px;
+    width: 100%;
+    background-color: aquamarine;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+}
+#container2{
+    height: 300px;
+    width: 100%;
+    background-color: pink;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+}
+#container3{
+    height: 300px;
+    width: 100%;
+    background-color: blanchedalmond;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+}

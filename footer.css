@@ -1,0 +1,46 @@
+footer{
+    height: 600px;
+    width: 100%;
+    background-color:lightpink;
+    position: bottom;
+    display: flex;
+
+}
+#box1{
+    height: 400px;
+    width: 100px;
+    background-color:lightpink;
+    justify-content: center;
+    
+}
+#div{
+    font-size: large;
+    
+
+}
+#box2{
+    height: 400px;
+    width: 100px;
+    background-color:lightpink;
+    justify-content: center;
+    
+}
+#box3{
+    height: 400px;
+    width: 100px;
+   
+    justify-content: center;
+    
+}
+#box4{
+     height: 400px;
+    width: 100px;
+   
+    justify-content: center;
+}
+#footer1{
+    height: 100px;
+    width: 100%;
+    background-color: darkorchid;
+    bottom: 0%;
+}

@@ -1,0 +1,19 @@
+#heading{
+    text-align: center;
+    text-decoration: underline;
+    color: red;
+    text-decoration-color: blue;
+    text-decoration-style: wavy;
+    text-decoration-thickness: 5px;
+    word-spacing: 50px;
+    text-transform: lowercase;
+    text-shadow: 10px 10px 10px black;
+}
+.p{
+    line-height: 80px;
+    
+}
+#box1{
+    height: 50px;
+    width: 50px;
+}

@@ -1,0 +1,21 @@
+h1::first-letter{
+    color: red;
+}
+h1::before{
+    content: "Hello";
+}
+h1::after{
+    content: "Bye";
+}
+p::first-line{
+    background-color: bisque;
+}
+p::selection{
+    background-color: green;
+}
+input::placeholder{
+    color:red;
+}
+#india::marker{
+    color: aquamarine;
+}
