@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Indian Army Motivation Hub — Single File React</title>
+
+  <!-- Optional font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#071228;
+      --panel:#0b1220;
+      --accent:#d97706;
+      --muted:#9fb0c8;
+      --glass: rgba(255,255,255,0.03);
+      --radius:12px;
+      --text:#eaf2ff;
+    }
+    *{box-sizing:border-box}
+    html,body,#root{height:100%}
+    body{margin:0;font-family:Inter,system-ui,Helvetica,Arial;color:var(--text);background:linear-gradient(180deg,var(--bg),#041122);-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    /* Header */
+    .site-header{position:sticky;top:0;z-index:60;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.35));backdrop-filter: blur(4px);border-bottom:1px solid rgba(255,255,255,0.02)}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .crest{width:44px;height:44px;border-radius:8px;object-fit:cover;background:linear-gradient(135deg,#b91c1c,#d97706);display:flex;align-items:center;justify-content:center;color:#071228;font-weight:800}
+    .brand-text{font-weight:800}
+    .brand-text small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+    .main-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .main-nav a{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px;font-weight:600}
+    .main-nav a.active{background:var(--accent);color:#071228}
+    .main-nav a:hover{color:#fff;background:rgba(255,255,255,0.02)}
+    .btn-cta{background:var(--accent);color:#071228;padding:8px 12px;border-radius:8px;font-weight:700;text-decoration:none}
+    .btn-ghost{border:1px solid rgba(255,255,255,0.06);padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none}
+
+    .mobile-toggle{display:none;background:transparent;border:0;color:var(--muted);font-size:20px;cursor:pointer}
+
+    /* Hero */
+    .hero{position:relative;min-height:420px;background-size:cover;background-position:center;display:flex;align-items:center}
+    .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(7,18,40,0.7), rgba(7,18,40,0.5));pointer-events:none}
+    .hero-content{position:relative;padding:36px;max-width:760px}
+    .hero-title{font-size:40px;letter-spacing:1.6px;margin:4px 0 8px 0;text-transform:uppercase}
+    .hero-lead{color:var(--muted);margin-bottom:14px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .pill{background:rgba(255,255,255,0.04);padding:8px 14px;border-radius:999px;color:var(--muted);font-weight:700;text-decoration:none}
+
+    /* Quick cards and grid */
+    .quick-links{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;flex:1;min-width:220px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    .card h3{margin:0 0 8px 0}
+    .intro{margin-top:20px}
+
+    /* Page layout */
+    .page{padding:28px 0}
+    .page .panel{background:var(--panel);padding:22px;border-radius:12px}
+    input,textarea,select{width:100%;padding:10px;margin-top:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text)}
+    .site-footer{padding:18px;text-align:center;color:var(--muted);margin-top:32px;border-top:1px solid rgba(255,255,255,0.02)}
+
+    /* gallery grid */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .muted{color:var(--muted)}
+    .link{color:var(--accent);text-decoration:none;font-weight:700}
+
+    /* modal/lightbox */
+    .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.75);z-index:120;padding:20px}
+    .lightbox img{max-width:100%;max-height:80vh;border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,0.6)}
+
+    /* small components */
+    .badge{display:inline-block;background:rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-weight:700;color:var(--muted)}
+    .progress{background:rgba(255,255,255,0.06);height:10px;border-radius:8px;overflow:hidden}
+    .progress > i{display:block;height:100%;background:var(--accent);width:0;transition:width 800ms cubic-bezier(.2,.9,.3,1)}
+
+    /* responsive */
+    @media(max-width:980px){
+      .main-nav{display:none}
+      .mobile-toggle{display:block}
+    }
+    @media(max-width:760px){
+      .grid-3{grid-template-columns:repeat(1,1fr)}
+      .grid-2{grid-template-columns:repeat(1,1fr)}
+      .hero{min-height:360px}
+      .hero-title{font-size:28px}
+    }
+
+    /* animations */
+    .fade-in{animation:fadeIn .6s ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    /* subtle hover */
+    .card:hover{transform:translateY(-6px);transition:transform .25s}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + ReactDOM + Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ---------- Helper image sources (royalty-free placeholders) ----------
+    const IMAGES = {
+      hero1: 'https://images.unsplash.com/photo-1533670800981-5a65f4d9ae49?q=80&w=1600&auto=format&fit=crop',
+      hero2: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop',
+      soldier1: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1600&auto=format&fit=crop',
+      soldier2: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1600&auto=format&fit=crop',
+      vehicles: 'https://images.unsplash.com/photo-1547920057-2d10d8a0b8b8?q=80&w=1600&auto=format&fit=crop'
+    };
+
+    // ---------- Simple hash router ----------
+    function useHashRoute() {
+      const [route, setRoute] = useState(location.hash.replace('#','') || 'home');
+      useEffect(() => {
+        const onHash = () => setRoute(location.hash.replace('#','') || 'home');
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+      }, []);
+      return route;
+    }
+
+    // ---------- Header ----------
+    function Header({onOpenMenu}) {
+      const route = location.hash.replace('#','') || 'home';
+      const nav = [
+        {to:'home', label:'Home'},
+        {to:'ranks', label:'Ranks'},
+        {to:'training', label:'Training'},
+        {to:'fitness', label:'Fitness'},
+        {to:'weapons', label:'Weapons'},
+        {to:'stories', label:'Stories'},
+        {to:'regiments', label:'Regiments'},
+        {to:'gallery', label:'Gallery'},
+        {to:'events', label:'Events'},
+        {to:'contact', label:'Contact'},
+        {to:'eligibility', label:'Join'},
+        {to:'dashboard', label:'Dashboard'},
+      ];
+      return (
+        <header className="site-header" role="banner">
+          <div className="container header-inner">
+            <div className="brand" aria-hidden>
+              <div className="crest">IA</div>
+              <div>
+                <div className="brand-text">JOIN INDIAN ARMY</div>
+                <small className="muted">Service Before Self</small>
+              </div>
+            </div>
+
+            <nav className="main-nav" aria-label="Main Navigation">
+              {nav.map(item => <a key={item.to} href={'#'+item.to} className={route===item.to ? 'active':''}>{item.label}</a>)}
+              <a href="#login" className="btn-ghost">Sign In</a>
+              <a href="#eligibility" className="btn-cta">Apply</a>
+            </nav>
+
+            <button className="mobile-toggle" aria-label="Open menu" onClick={onOpenMenu}>☰</button>
+          </div>
+        </header>
+      );
+    }
+
+    // ---------- Footer ----------
+    function Footer(){ return <footer className="site-footer"><div className="container">© Indian Army Motivation Hub — Demo. Not affiliated with Indian Army.</div></footer>; }
+
+    // ---------- Interactive components ----------
+    function Carousel({images, interval=3500}) {
+      const [idx, setIdx] = useState(0);
+      useEffect(() => {
+        const t = setInterval(()=> setIdx(i => (i+1) % images.length), interval);
+        return ()=>clearInterval(t);
+      }, [images, interval]);
+      return (
+        <div style={{position:'relative',overflow:'hidden',borderRadius:12}}>
+          <img src={images[idx]} alt="carousel" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
+          <div style={{position:'absolute',left:18,bottom:18,background:'rgba(0,0,0,0.35)',padding:'8px 12px',borderRadius:8}} className="muted">Slide {idx+1} / {images.length}</div>
+        </div>
+      );
+    }
+
+    function Lightbox({src, onClose}) {
+      useEffect(()=>{ function onKey(e){ if(e.key==='Escape') onClose(); } window.addEventListener('keydown',onKey); return ()=>window.removeEventListener('keydown',onKey); }, [onClose]);
+      return (
+        <div className="lightbox" role="dialog" aria-modal="true" onClick={onClose}>
+          <img src={src} alt="expanded" onClick={e=>e.stopPropagation()} />
+        </div>
+      );
+    }
+
+    function Accordion({title, children}) {
+      const [open, setOpen] = useState(false);
+      return (
+        <div style={{marginBottom:10}}>
+          <button onClick={()=>setOpen(x=>!x)} style={{width:'100%',textAlign:'left',padding:12,borderRadius:10,background:'rgba(255,255,255,0.02)',border:'0',color:'inherit',fontWeight:700}}>
+            {title} {open ? '▾':'▸'}
+          </button>
+          { open && <div style={{padding:12,background:'rgba(255,255,255,0.02)',borderRadius:8,marginTop:8}}>{children}</div> }
+        </div>
+      );
+    }
+
+    // ---------- Pages ----------
+    function Home() {
+      const carouselImages = [IMAGES.hero1, IMAGES.hero2, IMAGES.soldier1];
+      return (
+        <>
+          <section className="hero" style={{backgroundImage:`url(${IMAGES.hero1})`}} aria-label="Hero section">
+            <div className="hero-content container fade-in">
+              <div className="hero-title">SEVA ASMAKAM DHARMA</div>
+              <div className="hero-lead">Service, Duty, Honour — Join to serve your nation.</div>
+              <div className="hero-actions">
+                <a href="#eligibility" className="btn-cta">Eligibility Criteria</a>
+                <a href="#login" className="btn-ghost">Online Application</a>
+              </div>
+              <div style={{marginTop:14}} className="hero-links">
+                <a href="#events" className="pill">Upcoming Camps</a>
+                <a href="#stories" className="pill">Inspirational Stories</a>
+                <a href="#gallery" className="pill">Gallery</a>
+              </div>
+            </div>
+          </section>
+
+          <section className="quick-links container fade-in" style={{marginTop:18}}>
+            <div className="card">
+              <h3>Ranks & Badges</h3>
+              <p>Quick overview of ranks & insignia (UI summary).</p>
+              <a href="#ranks" className="link">Learn more →</a>
+            </div>
+            <div className="card">
+              <h3>Training Programs</h3>
+              <p>SSB, basic training, leadership courses.</p>
+              <a href="#training" className="link">Explore →</a>
+            </div>
+            <div className="card">
+              <h3>Join the Army</h3>
+              <p>Check eligibility and apply online (demo).</p>
+              <a href="#eligibility" className="link">Apply →</a>
+            </div>
+          </section>
+
+          <section className="container intro fade-in">
+            <h2>Highlights</h2>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 320px',gap:12,alignItems:'start',marginTop:12}}>
+              <div>
+                <p className="muted">Featured programs, success stories and training tips to help cadets prepare. Use the cards to explore each section — everything is a demo UI for your project.</p>
+                <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12,marginTop:12}}>
+                  <div className="card"><strong>SSB Preparation</strong><p className="muted">Mock tests, interview tips.</p></div>
+                  <div className="card"><strong>Physical Training</strong><p className="muted">Routines and checklists.</p></div>
+                </div>
+              </div>
+
+              <div>
+                <Carousel images={carouselImages} />
+              </div>
+            </div>
+          </section>
+        </>
+      );
+    }
+
+    function Ranks(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Ranks & Badges</h1>
+            <p className="muted">UI-only overview of common ranks in the Army.</p>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginTop:12}}>
+              {[
+                {r:'Lieutenant',d:'Junior officer'},
+                {r:'Captain',d:'Company officer'},
+                {r:'Major',d:'Senior officer'},
+                {r:'Colonel',d:'Senior field officer'},
+                {r:'Brigadier',d:'Brigade commander'},
+                {r:'General',d:'Army leadership'},
+              ].map(x => (
+                <div key={x.r} className="card">
+                  <div style={{fontWeight:800}}>{x.r}</div>
+                  <div className="muted" style={{marginTop:8}}>{x.d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Training(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Training Programs</h1>
+            <p className="muted">Overview of Basic, Advanced and Leadership training.</p>
+
+            <div className="grid-2" style={{marginTop:14}}>
+              <div className="card">
+                <h4>Basic Training</h4>
+                <p className="muted">Endurance, drill, teamwork, basic weapons handling (UI summary).</p>
+                <Accordion title="What to expect?">
+                  <p>Physical conditioning, fieldcraft, discipline and basic tactical training.</p>
+                </Accordion>
+              </div>
+              <div className="card">
+                <h4>Advanced & Leadership</h4>
+                <p className="muted">Specialized units, small-unit leadership and staff courses.</p>
+                <Accordion title="Course length (sample)">
+                  <p>Varies by role — from weeks to months of specialized training.</p>
+                </Accordion>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Fitness(){
+      // progress animation
+      const ref1 = useRef(null);
+      useEffect(()=> { setTimeout(()=>{ if(ref1.current) ref1.current.style.width='75%'; }, 200); }, []);
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Physical Fitness Guide</h1>
+            <p className="muted">Routines, standards and tips to build endurance and strength.</p>
+
+            <div style={{display:'grid',gridTemplateColumns:'1fr 320px',gap:12,marginTop:12}}>
+              <div>
+                <div className="card">
+                  <h4>Daily Routine</h4>
+                  <ul>
+                    <li>Morning run (5–10 km)</li>
+                    <li>Strength: push-ups, squats, pull-ups</li>
+                    <li>Endurance marches (long-distance)</li>
+                  </ul>
+                </div>
+
+                <div className="card" style={{marginTop:12}}>
+                  <h4>Tips</h4>
+                  <p className="muted">Gradual build-up, consistency, recovery and proper diet.</p>
+                </div>
+              </div>
+
+              <div>
+                <div className="card">
+                  <h4>Sample progress</h4>
+                  <div className="muted">Running endurance</div>
+                  <div className="progress" style={{marginTop:8}}>
+                    <i ref={ref1} style={{width:0}}></i>
+                  </div>
+                </div>
+                <div className="card" style={{marginTop:12}}>
+                  <h4>Fitness tests</h4>
+                  <ol className="muted">
+                    <li>1.5 mile run</li>
+                    <li>Push-up / Sit-up counts</li>
+                    <li>Obstacle / march test</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Weapons(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Weapons Awareness (UI only)</h1>
+            <p className="muted">High-level introductions & safe descriptions (no technical or sensitive details).</p>
+
+            <div className="grid-2" style={{marginTop:12}}>
+              <div className="card">
+                <img src={IMAGES.soldier2} alt="" style={{width:'100%',borderRadius:8,objectFit:'cover',height:160}}/>
+                <h4 style={{marginTop:12}}>Small Arms</h4>
+                <p className="muted">Standard small arms overview — UI-only.</p>
+              </div>
+              <div className="card">
+                <img src={IMAGES.vehicles} alt="" style={{width:'100%',borderRadius:8,objectFit:'cover',height:160}}/>
+                <h4 style={{marginTop:12}}>Armoured & Support</h4>
+                <p className="muted">Non-sensitive visual descriptions of equipment and roles.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Stories(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Inspirational Stories</h1>
+            <article className="card" style={{marginTop:12}}>
+              <h3>Bravery in Action</h3>
+              <p className="muted">Short demo story about courage, teamwork and devotion.</p>
+            </article>
+            <article className="card" style={{marginTop:12}}>
+              <h3>Service Above Self</h3>
+              <p className="muted">Another short piece celebrating service and sacrifice.</p>
+            </article>
+          </div>
+        </div>
+      );
+    }
+
+    function Regiments(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>History of Regiments</h1>
+            <p className="muted">Highlights and heritage (UI only).</p>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12,marginTop:12}}>
+              <div className="card"><h4>Regiment A</h4><p className="muted">Heritage and campaigns (demo) </p></div>
+              <div className="card"><h4>Regiment B</h4><p className="muted">Honours and traditions (demo)</p></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Gallery(){
+      const [lightSrc, setLightSrc] = useState(null);
+      const thumbs = [IMAGES.soldier1, IMAGES.soldier2, IMAGES.vehicles, IMAGES.hero1, IMAGES.hero2];
+
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Gallery (Photos & Videos)</h1>
+            <p className="muted">Click any image to open the lightbox. Images are safe, royalty-free placeholders.</p>
+
+            <div className="grid-3" style={{marginTop:12}}>
+              {thumbs.map((t,i) => (
+                <div key={i} onClick={()=>setLightSrc(t)} style={{cursor:'pointer'}}>
+                  <img src={t} alt={`thumb-${i}`} style={{width:'100%',borderRadius:8,height:160,objectFit:'cover'}}/>
+                </div>
+              ))}
+            </div>
+
+            <div style={{marginTop:16}} className="card">
+              <h4>Videos (Demo)</h4>
+              <div style={{position:'relative',paddingTop:'56.25%'}}>
+                <iframe src="https://www.youtube.com/embed/2Xc9gXyf2G4" title="inspirational" style={{position:'absolute',inset:0,width:'100%',height:'100%',border:0}} allowFullScreen />
+              </div>
+            </div>
+          </div>
+
+          { lightSrc && <Lightbox src={lightSrc} onClose={()=>setLightSrc(null)} /> }
+        </div>
+      );
+    }
+
+    function Events(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Events & Camps</h1>
+            <p className="muted">Upcoming recruitment and training camps (demo).</p>
+            <div className="card" style={{marginTop:12}}>
+              <h4>Recruitment Camp — City X</h4>
+              <p className="muted">Date: Jan 10, 2026 (demo)</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Contact(){
+      const [name,setName] = useState(''); const [msg,setMsg] = useState('');
+      function onSubmit(e){
+        e.preventDefault();
+        const list = JSON.parse(localStorage.getItem('messages')||'[]');
+        list.push({name,msg,at:new Date().toISOString()});
+        localStorage.setItem('messages', JSON.stringify(list));
+        alert('Message saved locally (demo).');
+        setName(''); setMsg('');
+      }
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Contact the Academy</h1>
+            <form onSubmit={onSubmit}>
+              <label style={{fontWeight:700}}>Name</label>
+              <input value={name} onChange={e=>setName(e.target.value)} required />
+              <label style={{fontWeight:700,marginTop:8}}>Message</label>
+              <textarea value={msg} onChange={e=>setMsg(e.target.value)} rows={4} required />
+              <div style={{marginTop:12}}><button className="btn-cta" type="submit">Send</button></div>
+            </form>
+            <p className="muted" style={{marginTop:12}}>Demo-only contact. Messages stored locally in browser storage.</p>
+          </div>
+        </div>
+      );
+    }
+
+    function Eligibility(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Join Indian Army — Eligibility (Demo)</h1>
+            <ul>
+              <li>Age limits: 17.5 - 23 (sample)</li>
+              <li>Education: 10+2 / Graduation (varies by entry)</li>
+              <li>Medical: Fit as per standards</li>
+            </ul>
+            <p className="muted">Verify the exact and latest criteria on official recruitment portals.</p>
+          </div>
+        </div>
+      );
+    }
+
+    function Login(){
+      const [email,setEmail] = useState(''); const [pwd,setPwd] = useState('');
+      function onSubmit(e){ e.preventDefault(); alert('Demo login — no backend'); }
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Login / Register</h1>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 320px',gap:12}}>
+              <form onSubmit={onSubmit}>
+                <label>Email</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} required />
+                <label>Password</label><input type="password" value={pwd} onChange={e=>setPwd(e.target.value)} required />
+                <div style={{marginTop:12}}><button className="btn-cta" type="submit">Sign in</button></div>
+              </form>
+
+              <div className="card">
+                <h3>New here?</h3>
+                <p className="muted">Register to apply and track your progress (demo).</p>
+                <a href="#register" className="btn-ghost">Register</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Dashboard(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Cadet Dashboard (Dummy)</h1>
+            <p className="muted">Demo statistics and progress.</p>
+            <div className="card" style={{marginTop:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}><strong>Physical</strong><span className="muted">70%</span></div>
+              <div className="progress" style={{marginTop:8}}><i style={{width:'70%'}}></i></div>
+            </div>
+            <div className="card" style={{marginTop:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}><strong>SSB Prep</strong><span className="muted">45%</span></div>
+              <div className="progress" style={{marginTop:8}}><i style={{width:'45%'}}></i></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function About(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>About Indian Army</h1>
+            <p className="muted">This demo site celebrates the spirit of service. Not an official source.</p>
+            <div className="card" style={{marginTop:12}}><h4>Motto</h4><p>Service Before Self</p></div>
+          </div>
+        </div>
+      );
+    }
+
+    function FAQ(){
+      return (
+        <div className="page">
+          <div className="container panel fade-in">
+            <h1>Help & FAQ</h1>
+            <dl>
+              <dt>How to apply?</dt><dd>Visit Eligibility and Apply pages (demo).</dd>
+              <dt>Is this official?</dt><dd>No — demo UI only. Always use official government portals for applications and donations.</dd>
+            </dl>
+          </div>
+        </div>
+      );
+    }
+
+    // ---------- App (routing + mobile nav) ----------
+    function App(){
+      const route = useHashRoute();
+      const [showMobile, setShowMobile] = useState(false);
+
+      // Always scroll to top when route changes
+      useEffect(()=> { window.scrollTo({top:0,behavior:'smooth'}); setShowMobile(false); }, [route]);
+
+      // Mini map of routes to components
+      const pages = {
+        home: <Home/>,
+        ranks: <Ranks/>,
+        training: <Training/>,
+        fitness: <Fitness/>,
+        weapons: <Weapons/>,
+        stories: <Stories/>,
+        regiments: <Regiments/>,
+        gallery: <Gallery/>,
+        contact: <Contact/>,
+        eligibility: <Eligibility/>,
+        events: <Events/>,
+        login: <Login/>,
+        dashboard: <Dashboard/>,
+        about: <About/>,
+        faq: <FAQ/>
+      };
+      const view = pages[route] || pages['home'];
+
+      return (
+        <>
+          <Header onOpenMenu={()=>setShowMobile(true)} />
+          { showMobile && <MobileMenu onClose={()=>setShowMobile(false)} /> }
+          <main>{view}</main>
+          <Footer />
+        </>
+      );
+    }
+
+    function MobileMenu({onClose}){
+      const items = ['home','ranks','training','fitness','weapons','stories','regiments','gallery','events','contact','eligibility','dashboard','about','faq'];
+      return (
+        <div style={{position:'fixed',inset:0,zIndex:200,background:'rgba(2,6,23,0.9)',padding:20}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+            <div style={{display:'flex',alignItems:'center',gap:10}}><div className="crest">IA</div><strong>JOIN INDIAN ARMY</strong></div>
+            <button onClick={onClose} style={{background:'transparent',border:0,color:'#fff',fontSize:20}}>✕</button>
+          </div>
+
+          <nav style={{display:'flex',flexDirection:'column',gap:12}}>
+            {items.map(s => <a key={s} href={'#'+s} onClick={onClose} style={{color:'#fff',textDecoration:'none',fontSize:18,textTransform:'capitalize'}}>{s.replace('-',' ')}</a>)}
+          </nav>
+        </div>
+      );
+    }
+
+    // ---------- Render ----------
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

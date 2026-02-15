@@ -1,0 +1,394 @@
+<!-- Save as index.html and open in browser -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Indian Army Motivation Hub — React Single File</title>
+  <!-- Fonts (optional) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; --accent:#d97706; --muted:#c5ceda; --card:#0b1220; --glass:rgba(255,255,255,0.03); --radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:#eaf2ff; -webkit-font-smoothing:antialiased}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .crest{width:48px;height:48px;object-fit:contain}
+    .brand-text{font-weight:800}
+    .brand-text small{display:block;font-weight:600;color:var(--muted);font-size:11px}
+    .main-nav a{color:var(--muted);text-decoration:none;margin-left:14px;padding:6px 8px;border-radius:6px}
+    .main-nav a:hover{color:#fff;background:rgba(255,255,255,0.02)}
+    .main-nav a.active{color:#071228;background:var(--accent);font-weight:700}
+    .btn-cta{background:var(--accent);padding:8px 12px;border-radius:6px;color:#071228;text-decoration:none;margin-left:8px;font-weight:700}
+    .btn-ghost{border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:6px;color:var(--muted);text-decoration:none;margin-left:8px}
+    .mobile-toggle{display:none;cursor:pointer;font-size:20px;padding:6px}
+
+    .hero{position:relative;height:480px;background-image:url('assets/hero.jpg');background-size:cover;background-position:center;display:flex;align-items:center}
+    .hero-overlay{position:absolute;inset:0;background:rgba(7,18,40,0.7)}
+    .hero-content{position:relative;color:white;padding:36px}
+    .hero-content h1{font-size:46px;letter-spacing:2px;margin:0 0 6px 0;text-transform:uppercase}
+    .lead{color:var(--muted);margin-bottom:12px}
+    .hero-actions a{margin-right:8px}
+    .hero-links{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+    .pill{background:rgba(255,255,255,0.06);padding:10px 18px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:700}
+
+    .quick-links{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:18px;border-radius:12px;flex:1;min-width:220px}
+    .card h3{margin:0}
+
+    .page{padding:28px 0}
+    .page .container{background:var(--card);padding:22px;border-radius:12px}
+    input,textarea,select{width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+    .site-footer{padding:18px;text-align:center;color:var(--muted);margin-top:32px}
+
+    /* small helpers */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .muted{color:var(--muted)}
+    .link{color:var(--accent);text-decoration:none;font-weight:700}
+
+    /* responsive */
+    @media(max-width:980px){.main-nav{display:none}.mobile-toggle{display:block}}
+    @media(max-width:640px){.hero{height:360px}.hero-content h1{font-size:28px}.grid-3{grid-template-columns:repeat(1,1fr)}.grid-2{grid-template-columns:repeat(1,1fr)}
+    .quick-links{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React + Babel CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    /* ---------- Router: hash-based ---------- */
+    function useHashRoute() {
+      const [route, setRoute] = useState(location.hash.replace('#','') || 'home');
+      useEffect(() => {
+        function onHash() { setRoute(location.hash.replace('#','') || 'home'); }
+        window.addEventListener('hashchange', onHash);
+        return () => window.removeEventListener('hashchange', onHash);
+      }, []);
+      return route;
+    }
+
+    /* ---------- Shared components ---------- */
+    function Header({onToggle}) {
+      const route = location.hash.replace('#','') || 'home';
+      const nav = [
+        {to:'home', label:'Home'},
+        {to:'about', label:'About India Army'},
+        {to:'ranks', label:'Ranks & Badges'},
+        {to:'training', label:'Training'},
+        {to:'fitness', label:'Physical Fitness'},
+        {to:'weapons', label:'Weapons'},
+        {to:'stories', label:'Stories'},
+        {to:'regiments', label:'Regiments'},
+        {to:'gallery', label:'Gallery'},
+        {to:'events', label:'Events'},
+        {to:'contact', label:'Contact'},
+        {to:'login', label:'Login'},
+        {to:'eligibility', label:'Apply'}
+      ];
+      return (
+        <header className="site-header" style={{background:'transparent'}}>
+          <div className="container header-inner">
+            <div className="brand" role="banner">
+              <img src="assets/crest.png" alt="crest" className="crest" onError={(e)=>{e.target.style.display='none'}}/>
+              <div className="brand-text">JOIN INDIAN ARMY <small>Service Before Self</small></div>
+            </div>
+
+            <nav className="main-nav" aria-label="Main navigation">
+              {nav.map(item => (
+                <a key={item.to}
+                   href={'#'+item.to}
+                   className={route===item.to ? 'active':''}
+                   aria-current={route===item.to ? 'page':undefined}
+                >{item.label}</a>
+              ))}
+              <a href="#login" className="btn-ghost" style={{marginLeft:12}}>Sign In</a>
+              <a href="#eligibility" className="btn-cta">Apply</a>
+            </nav>
+
+            <button className="mobile-toggle" aria-label="Open menu" onClick={onToggle}>☰</button>
+          </div>
+        </header>
+      );
+    }
+
+    function Footer(){
+      return <footer className="site-footer"><div className="container">© Indian Army Motivation Hub — Demo site. Not affiliated with Indian Army.</div></footer>;
+    }
+
+    /* ---------- Pages ---------- */
+    function Home(){
+      return (
+        <>
+          <section className="hero" role="region" aria-label="Hero">
+            <div className="hero-overlay" />
+            <div className="hero-content container">
+              <h1>SEVA ASMAKAM DHARMA</h1>
+              <p className="lead">Service, Duty, Honour — Join to serve your nation.</p>
+              <div className="hero-actions">
+                <a href="#eligibility" className="btn-cta">Eligibility Criteria</a>
+                <a href="#login" className="btn-ghost">Online Application</a>
+              </div>
+
+              <div className="hero-links" aria-hidden>
+                <a className="pill" href="#eligibility">Reporting Date for NDA</a>
+                <a className="pill" href="#login">Online Application</a>
+                <a className="pill" href="#eligibility">Eligibility Criteria</a>
+              </div>
+            </div>
+          </section>
+
+          <section className="quick-links container" aria-labelledby="quicklinks">
+            <div className="card">
+              <h3>Ranks & Badges</h3>
+              <p>Discover the rank structure and badges.</p>
+              <a className="link" href="#ranks">Learn more →</a>
+            </div>
+            <div className="card">
+              <h3>Training Programs</h3>
+              <p>Overview of training and SSB guidance.</p>
+              <a className="link" href="#training">Explore →</a>
+            </div>
+            <div className="card">
+              <h3>Join the Army</h3>
+              <p>Check eligibility and apply.</p>
+              <a className="link" href="#eligibility">Apply →</a>
+            </div>
+          </section>
+
+          <section className="container intro">
+            <h2>Inspirational Stories</h2>
+            <p>Read moving accounts of bravery, sacrifice and service.</p>
+            <a className="link" href="#stories">View stories →</a>
+          </section>
+        </>
+      );
+    }
+
+    function Ranks(){ return (
+      <div className="page"><div className="container"><h1>Ranks & Badges</h1>
+        <p>Below is a concise list of common ranks and a short description. (UI only)</p>
+        <ul>
+          <li><strong>Lieutenant</strong> — Junior Commissioned Officer</li>
+          <li><strong>Captain</strong> — Company level officer</li>
+          <li><strong>Major</strong> — Senior company/battalion officer</li>
+          <li><strong>Colonel</strong> — Senior field officer</li>
+          <li><strong>Brigadier</strong> — Brigade level</li>
+          <li><strong>Major General</strong> — Division level</li>
+          <li><strong>General</strong> — Highest field rank</li>
+        </ul>
+      </div></div>
+    );}
+
+    function Training(){ return (
+      <div className="page"><div className="container"><h1>Training Programs</h1>
+        <p>Overview of training: Basic Training, Advanced, Leadership & SSB prep.</p>
+        <div className="card"><h4>Basic Training</h4><p>Foundational soldier skills, discipline and teamwork.</p></div>
+        <div className="card" style={{marginTop:12}}><h4>Advanced & Leadership</h4><p>Specialized courses and leadership development.</p></div>
+      </div></div>
+    );}
+
+    function Fitness(){ return (
+      <div className="page"><div className="container"><h1>Physical Fitness Guide</h1>
+        <p>Sample daily routine and training tips (UI only).</p>
+        <div className="card"><h4>Daily Routine</h4>
+          <ul>
+            <li>Morning run — 5–10 km (gradual build-up)</li>
+            <li>Strength training — push-ups, squats, pull-ups</li>
+            <li>Endurance — long marches with pack</li>
+          </ul>
+        </div>
+      </div></div>
+    );}
+
+    function Weapons(){ return (
+      <div className="page"><div className="container"><h1>Weapons Awareness (UI only)</h1>
+        <p>UI-only overview of equipment. No technical details.</p>
+        <div className="grid-2" style={{marginTop:12}}>
+          <div className="card"><h4>Rifles</h4><p>Standard-issue small arms overview.</p></div>
+          <div className="card"><h4>Armoured</h4><p>Armoured vehicles and role overview.</p></div>
+        </div>
+      </div></div>
+    );}
+
+    function Stories(){ return (
+      <div className="page"><div className="container"><h1>Inspirational Stories</h1>
+        <article><h3>Bravery in Action</h3><p>Short sample story about dedication and service (demo).</p></article>
+        <article style={{marginTop:12}}><h3>Devotion to Duty</h3><p>Another short story highlighting values and sacrifice.</p></article>
+      </div></div>
+    );}
+
+    function Regiments(){ return (
+      <div className="page"><div className="container"><h1>History of Regiments</h1>
+        <p>Short historical overview of notable regiments (UI only).</p>
+        <div className="card" style={{marginTop:12}}><h4>Regiment A</h4><p>Heritage and notable campaigns (demo).</p></div>
+      </div></div>
+    );}
+
+    function Gallery(){ return (
+      <div className="page"><div className="container"><h1>Gallery (Photos & Videos)</h1>
+        <div className="grid-3" style={{marginTop:12}}>
+          <img src="assets/hero.jpg" alt="thumb" style={{width:'100%',borderRadius:8}} onError={(e)=>{e.target.style.display='none'}}/>
+          <img src="assets/hero.jpg" alt="thumb" style={{width:'100%',borderRadius:8}} onError={(e)=>{e.target.style.display='none'}}/>
+          <img src="assets/hero.jpg" alt="thumb" style={{width:'100%',borderRadius:8}} onError={(e)=>{e.target.style.display='none'}}/>
+        </div>
+      </div></div>
+    );}
+
+    function Events(){ return (
+      <div className="page"><div className="container"><h1>Events & Camps</h1>
+        <p>Upcoming recruitment camps & public events (sample UI).</p>
+        <div className="card" style={{marginTop:12}}><h4>Recruitment Camp — City X</h4><p>Date: 2026-01-10 (demo)</p></div>
+      </div></div>
+    );}
+
+    function Contact(){
+      const [name,setName] = useState('');
+      const [msg,setMsg] = useState('');
+      function onSubmit(e){ e.preventDefault(); const list = JSON.parse(localStorage.getItem('messages')||'[]'); list.push({name,msg,at:new Date().toISOString()}); localStorage.setItem('messages', JSON.stringify(list)); alert('Message saved locally (demo).'); setName(''); setMsg('');}
+      return (
+        <div className="page"><div className="container"><h1>Contact the Academy</h1>
+          <form onSubmit={onSubmit}>
+            <label>Name</label><input value={name} onChange={e=>setName(e.target.value)} required/>
+            <label>Message</label><textarea value={msg} onChange={e=>setMsg(e.target.value)} rows={4} required/>
+            <div style={{marginTop:12}}><button className="btn-cta" type="submit">Send</button></div>
+          </form>
+          <p className="muted" style={{marginTop:10}}>Demo: messages are stored locally only.</p>
+        </div></div>
+      );
+    }
+
+    function Eligibility(){ return (
+      <div className="page"><div className="container"><h1>Join Indian Army – Eligibility</h1>
+        <ul>
+          <li>Age limits: 17.5 - 23 (example)</li>
+          <li>Education: 10+2 / Graduation (varies by entry)</li>
+          <li>Medical: Fit as per standards</li>
+        </ul>
+        <p className="muted">This is demo content. Check official portals for exact criteria.</p>
+      </div></div>
+    );}
+
+    function Login(){
+      const [email,setEmail] = useState(''); const [pwd,setPwd] = useState('');
+      function onSubmit(e){ e.preventDefault(); alert('Demo sign in — no backend.'); }
+      return (
+        <div className="page"><div className="container"><h1>Login / Register</h1>
+          <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+            <form style={{flex:1,minWidth:260}} onSubmit={onSubmit}>
+              <label>Email</label><input type="email" value={email} onChange={e=>setEmail(e.target.value)} required/>
+              <label>Password</label><input type="password" value={pwd} onChange={e=>setPwd(e.target.value)} required/>
+              <div style={{marginTop:10}}><button className="btn-cta" type="submit">Sign in</button></div>
+            </form>
+            <div style={{flex:1,minWidth:260}}>
+              <h3>New here?</h3>
+              <p>Create an account to apply and track progress (demo).</p>
+              <a className="btn-ghost" href="#register">Register</a>
+            </div>
+          </div>
+        </div></div>
+      );
+    }
+
+    function Dashboard(){ return (
+      <div className="page"><div className="container"><h1>Cadet Dashboard (Dummy)</h1>
+        <p>Training progress (demo):</p>
+        <div className="card"><strong>Physical</strong>
+          <div style={{height:12,background:'rgba(255,255,255,0.06)',borderRadius:8,marginTop:8,overflow:'hidden'}}><div style={{height:12,background:'var(--accent)',width:'70%'}}></div></div>
+        </div>
+        <div className="card" style={{marginTop:8}}><strong>SSB Prep</strong>
+          <div style={{height:12,background:'rgba(255,255,255,0.06)',borderRadius:8,marginTop:8,overflow:'hidden'}}><div style={{height:12,background:'var(--accent)',width:'40%'}}></div></div>
+        </div>
+      </div></div>
+    );}
+
+    function About(){ return (
+      <div className="page"><div className="container"><h1>About Indian Army</h1>
+        <p>Short intro: values, motto and service. This demo site celebrates the spirit of service and is not official.</p>
+        <div className="card" style={{marginTop:12}}><h4>Motto</h4><p>Service Before Self</p></div>
+      </div></div>
+    );}
+
+    function FAQ(){ return (
+      <div className="page"><div className="container"><h1>Help & FAQ</h1>
+        <dl>
+          <dt>How to apply?</dt><dd>Visit Eligibility and Apply pages (demo).</dd>
+          <dt>Is this official?</dt><dd>No — demo UI only.</dd>
+        </dl>
+      </div></div>
+    );}
+
+    /* ---------- App (router + mobile menu) ---------- */
+    function App(){
+      const route = useHashRoute();
+      const [showMobileNav, setShowMobileNav] = useState(false);
+
+      useEffect(()=>{ // close mobile nav on route change
+        setShowMobileNav(false);
+      }, [route]);
+
+      // choose page component
+      const routes = {
+        home: <Home/>,
+        ranks: <Ranks/>,
+        training: <Training/>,
+        fitness: <Fitness/>,
+        weapons: <Weapons/>,
+        stories: <Stories/>,
+        regiments: <Regiments/>,
+        gallery: <Gallery/>,
+        contact: <Contact/>,
+        eligibility: <Eligibility/>,
+        events: <Events/>,
+        login: <Login/>,
+        dashboard: <Dashboard/>,
+        about: <About/>,
+        faq: <FAQ/>,
+      };
+      const Page = routes[route] || routes['home'];
+
+      // dynamic mobile nav (simple)
+      function MobileNav(){
+        return (
+          <div style={{position:'fixed',inset:0,background:'rgba(2,6,23,0.85)',zIndex:999,padding:20}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <div style={{display:'flex',gap:12,alignItems:'center'}}><img src="assets/crest.png" alt="crest" style={{width:40}} onError={(e)=>{e.target.style.display='none'}}/><strong>JOIN INDIAN ARMY</strong></div>
+              <button onClick={()=>setShowMobileNav(false)} style={{background:'transparent',border:'0',color:'#fff',fontSize:20}}>✕</button>
+            </div>
+            <nav style={{marginTop:20,display:'flex',flexDirection:'column',gap:12}}>
+              {['home','about','ranks','training','fitness','weapons','stories','regiments','gallery','events','contact','login','eligibility','dashboard','faq'].map(k => (
+                <a key={k} href={'#'+k} style={{color:'#fff',textDecoration:'none',fontSize:18}} onClick={()=>setShowMobileNav(false)}>{k.charAt(0).toUpperCase() + k.slice(1).replace('-',' ')}</a>
+              ))}
+            </nav>
+          </div>
+        );
+      }
+
+      return (
+        <>
+          <Header onToggle={()=>setShowMobileNav(v=>!v)} />
+          { showMobileNav && <MobileNav /> }
+          <main>
+            {Page}
+          </main>
+          <Footer />
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
