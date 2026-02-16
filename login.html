@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" placeholder="Name " id="username">
+    <br>
+    <br>
+    <input type="password" placeholder="password" id="password">
+    <br>
+     <button onclick="login()">Login</button>
+
+     <script>
+
+        let alluser= JSON.parse(localStorage.getItem("alluser"))
+        console.log(alluser);
+        let login=()=>{
+            let username= document.getElementById("username").value
+            let password= document.getElementById("password").value
+        }
+        let arr=[10,20,30,40,50]
+        // let find30= arr.find((ele)=>{
+        //     return ele===30
+        // })
+
+        let finduser=alluser.find((ele)=>{
+            return ele.username===username && ele.password
+        })
+        console.log(finduser);
+        if(finduser){
+            localStorage.setItem("username",finduser)
+            window.location.href="./home.html"
+        }
+        else{
+            alert("Invalid User")
+        }
+     </script>
+</body>
+</html>
