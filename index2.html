@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Product</title>
+</head>
+<body>
+
+    <h2>Create Product</h2>
+
+    <input type="text" id="name" placeholder="Enter Product Name">
+    <br><br>
+
+    <input type="number" id="price" placeholder="Enter Price">
+    <br><br>
+
+    <input type="text" id="category" placeholder="Enter Category">
+    <br><br>
+
+    <button onclick="createProduct()">Create Product</button>
+
+    <script>
+        function createProduct() {
+
+            let name = document.getElementById("name").value;
+            let price = document.getElementById("price").value;
+            let category = document.getElementById("category").value;
+
+            let product = {
+                productName: name,
+                productPrice: price,
+                productCategory: category
+            };
+
+            // Get existing products
+            let products = JSON.parse(localStorage.getItem("products")) || [];
+
+            // Push new product
+            products.push(product);
+
+            // Store again
+            localStorage.setItem("products", JSON.stringify(products));
+
+            alert("Product Stored Successfully!");
+
+            // Go to product page
+            window.location.href = "product.html";
+        }
+    </script>
+
+</body>
+</html>

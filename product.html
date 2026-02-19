@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>                                  
+<head>
+    <title>Product Page</title>
+</head>
+<body>
+
+    <h2>Product List</h2>
+
+    <div id="productContainer"></div>
+
+    <script>
+
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+
+        console.log(products);   // 👈 See product object in console
+
+        let container = document.getElementById("productContainer");
+
+        products.forEach((item, index) => {
+
+            let div = document.createElement("div");
+            div.style.border = "1px solid black";
+            div.style.margin = "10px";
+            div.style.padding = "10px";
+
+            div.innerHTML = `
+                <p><b>Name:</b> ${item.productName}</p>
+                <p><b>Price:</b> ${item.productPrice}</p>
+                <p><b>Category:</b> ${item.productCategory}</p>
+            `;
+
+            container.appendChild(div);
+        });
+
+    </script>
+
+</body>
+</html>
