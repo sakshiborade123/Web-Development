@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetching Products</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+        }
+
+        h2{
+            text-align: center;
+        }
+
+        #searchProducts{
+            width: 300px;
+            padding: 8px;
+            margin: 20px auto;
+            display: block;
+        }
+
+        #productsContainer{
+            width: 100%;
+            border: 2px solid red;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .card{
+            height: 400px;
+            width: 300px;
+            border: 2px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .prod-img{
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Product List</h2>
+
+    <input type="text" id="searchProducts" placeholder="Search products..." />
+
+    <div id="productsContainer"></div>
+
+    <script>
+
+        let container = document.getElementById("productsContainer");
+        let searchProducts = document.getElementById("searchProducts");
+        let allProducts = [];
+
+        // Display Products
+        let displayProducts = (products) => {
+            container.innerHTML = products.map((ele) => `
+                <div class="card">
+                    <img src="${ele.images[0]}" class="prod-img"/>
+                    <h3>${ele.title}</h3>
+                    <p>Price: ₹${Math.round(ele.price * 90)}</p>
+                    <h4>
+                        Rating:
+                        ${"⭐".repeat(Math.round(ele.rating))}
+                        ${"☆".repeat(5 - Math.round(ele.rating))}
+                    </h4>
+                </div>
+            `).join("");
+        }
+
+        // Fetch Products
+        let fetchingProducts = async () => {
+            let getProducts = await fetch("https://dummyjson.com/products");
+            let data = await getProducts.json();
+
+            console.log(data.products);
+
+            allProducts = data.products;
+            displayProducts(allProducts);
+        }
+
+        fetchingProducts();
+
+        // Search Functionality
+        searchProducts.addEventListener("input", (e) => {
+
+            let filteredProducts = allProducts.filter((ele) => {
+                return ele.title
+                    .toLowerCase()
+                    .includes(e.target.value.toLowerCase());
+            });
+
+            displayProducts(filteredProducts);
+        });
+
+    </script>
+
+</body>
+</html>
